@@ -1,4 +1,4 @@
-package hello.world
+package example.hawaii
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExportTopLevel, JSImport}
