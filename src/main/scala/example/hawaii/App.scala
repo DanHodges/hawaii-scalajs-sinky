@@ -1,4 +1,4 @@
-package hello.world
+package example.hawaii
 
 import slinky.core._
 import slinky.core.annotations.react
@@ -20,34 +20,13 @@ object ReactLogo extends js.Object
 @react class App extends Component {
   type Props = Unit
 
-  val HAWAII = "HAWAII"
-  val KAHOOLAWE = "KAHOOLAWE"
-  val KAUAI = "KAUAI"
-  val LANAI = "LANAI"
-  val MAUI = "MAUI"
-  val MOLOKAI = "MOLOKAI"
-  val NIIHAU = "NIIHAU"
-  val OAHU = "OAHU"
-
-  val islandNames: List[String] = List(
-    HAWAII,
-    KAHOOLAWE,
-    KAUAI,
-    LANAI,
-    MAUI,
-    MOLOKAI,
-    NIIHAU,
-    OAHU,
-  )
-
-  def randomIsland(): String = Random.shuffle(islandNames).head
 
   case class State(correctAnswers: Int,
                    wrongAnswers: Int,
                    selectedIsland: String,
                    seconds: Int)
 
-  override def initialState = State(0, 0, randomIsland(), 0)
+  override def initialState = State(0, 0, Islands.randomIsland(), 0)
 
   def chooseIsland(name: String): Unit = {
     if (name == state.selectedIsland) {
@@ -56,11 +35,11 @@ object ReactLogo extends js.Object
       setState(_.copy(wrongAnswers = state.wrongAnswers + 1))
     }
 
-    setState(_.copy(selectedIsland = randomIsland()))
+    setState(_.copy(selectedIsland = Islands.randomIsland()))
   }
 
   def startTimer(): Unit = {
-    setState(State(0, 0, randomIsland(), 30))
+    setState(State(0, 0, Islands.randomIsland(), 30))
 
     def tick(): Unit = {
       setInterval(1000) {
