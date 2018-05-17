@@ -1,27 +1,20 @@
 package example.hawaii
 
-import scala.util.Random
+import slinky.core._
+import slinky.core.annotations.react
+import slinky.web.html._
 
-object Islands {
-  def randomIsland(): String = Random.shuffle(islandNames).head
+import scala.scalajs.js
 
-  val HAWAII = "HAWAII"
-  val KAHOOLAWE = "KAHOOLAWE"
-  val KAUAI = "KAUAI"
-  val LANAI = "LANAI"
-  val MAUI = "MAUI"
-  val MOLOKAI = "MOLOKAI"
-  val NIIHAU = "NIIHAU"
-  val OAHU = "OAHU"
+@react class Islands extends StatelessComponent {
+  case class Props(selectedIsland: String)
 
-  val islandNames = Seq(
-    HAWAII,
-    KAHOOLAWE,
-    KAUAI,
-    LANAI,
-    MAUI,
-    MOLOKAI,
-    NIIHAU,
-    OAHU
-  )
+  def render = {
+    IslandData.svgList().map { island =>
+      span(key := island._1)(
+      Island(name = island._1,
+             svg = island._2,
+             showBorder = props.selectedIsland == island._1))
+    }
+  }
 }

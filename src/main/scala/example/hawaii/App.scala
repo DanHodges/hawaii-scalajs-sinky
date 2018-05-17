@@ -1,13 +1,15 @@
 package example.hawaii
 
+import com.sun.java.swing.plaf.windows.WindowsBorders.DashedBorder
 import slinky.core._
 import slinky.core.annotations.react
+import slinky.core.facade.ReactElement
 import slinky.web.html._
 
 import scala.scalajs.js
-import scala.scalajs.js.timers.setInterval
+import scala.scalajs.js.timers._
 import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
-import scala.util.Random
+import js.Dynamic.{global => g}
 
 @JSImport("resources/App.css", JSImport.Default)
 @js.native
@@ -20,30 +22,29 @@ object ReactLogo extends js.Object
 @react class App extends Component {
   type Props = Unit
 
-
   case class State(correctAnswers: Int,
                    wrongAnswers: Int,
                    selectedIsland: String,
                    seconds: Int)
 
-  override def initialState = State(0, 0, Islands.randomIsland(), 0)
+  override def initialState = State(0, 0, IslandData.randomIsland(), 0)
 
-  def chooseIsland(name: String): Unit = {
+  val chooseIsland: String => Unit = name => {
     if (name == state.selectedIsland) {
       setState(_.copy(correctAnswers = state.correctAnswers + 1))
     } else {
       setState(_.copy(wrongAnswers = state.wrongAnswers + 1))
     }
 
-    setState(_.copy(selectedIsland = Islands.randomIsland()))
+    setState(_.copy(selectedIsland = IslandData.randomIsland()))
   }
 
-  def startTimer(): Unit = {
-    setState(State(0, 0, Islands.randomIsland(), 30))
+  val startTimer: Unit => Unit = Unit => {
+    setState(State(0, 0, IslandData.randomIsland(), 30))
 
     def tick(): Unit = {
-      setInterval(1000) {
-        setState(_.copy(state.seconds - 1))
+      setTimeout(1000) {
+        setState(_.copy(seconds = state.seconds - 1))
         if (state.seconds < 1) () else tick()
       }
     }
@@ -51,16 +52,23 @@ object ReactLogo extends js.Object
     tick()
   }
 
-  override def componentDidMount() {
-    startTimer()
-  }
-
   private val css = AppCSS
 
   def render() = {
     div(className := "App")(
-      "seconds:",
-      state.seconds.toString
+      div(className := "ocean")(Islands(selectedIsland = state.selectedIsland)),
+      div(className := "dashboard")(
+        Scoreboard(
+          correctAnswers = state.correctAnswers,
+          wrongAnswers = state.wrongAnswers,
+          seconds = state.seconds,
+          startTimer = startTimer
+        ),
+        ButtonList(
+          onClick = chooseIsland,
+          hide = state.seconds == 0
+        )
+      )
     )
   }
 }
