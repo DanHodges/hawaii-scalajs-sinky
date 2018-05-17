@@ -4,8 +4,6 @@ import slinky.core._
 import slinky.core.annotations.react
 import slinky.web.html._
 
-import scala.scalajs.js
-
 @react class Scoreboard extends StatelessComponent {
   case class Props(correctAnswers: Int,
                    wrongAnswers: Int,
@@ -15,7 +13,7 @@ import scala.scalajs.js
   def render = {
     div(
       if (props.correctAnswers + props.wrongAnswers + props.seconds == 0) {
-        div("Welcome to Pick And Island!")
+        h3("Welcome to Pick And Island!")
       } else {
         div(
           div("Correct :", props.correctAnswers.toString),

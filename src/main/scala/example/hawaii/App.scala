@@ -1,15 +1,12 @@
 package example.hawaii
 
-import com.sun.java.swing.plaf.windows.WindowsBorders.DashedBorder
 import slinky.core._
 import slinky.core.annotations.react
-import slinky.core.facade.ReactElement
 import slinky.web.html._
 
 import scala.scalajs.js
 import scala.scalajs.js.timers._
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
-import js.Dynamic.{global => g}
+import scala.scalajs.js.annotation.JSImport
 
 @JSImport("resources/App.css", JSImport.Default)
 @js.native
@@ -39,7 +36,7 @@ object ReactLogo extends js.Object
     setState(_.copy(selectedIsland = IslandData.randomIsland()))
   }
 
-  val startTimer: Unit => Unit = Unit => {
+  val startTimer: Unit => Unit = _ => {
     setState(State(0, 0, IslandData.randomIsland(), 30))
 
     def tick(): Unit = {

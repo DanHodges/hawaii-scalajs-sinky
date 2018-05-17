@@ -4,8 +4,6 @@ import slinky.core._
 import slinky.core.annotations.react
 import slinky.web.html._
 
-import scala.scalajs.js
-
 @react class ButtonList extends StatelessComponent {
   case class Props(onClick: String => Unit, hide: Boolean)
 
